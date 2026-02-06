@@ -21,8 +21,8 @@ Svar:
 ### 2. Hämta wishlist för en användare
 
 **GET** `/wishlist/{userId}`
-```json
 **Response:**
+```json
 {
 "userId": "user1",
 "products": ["prod1"]
