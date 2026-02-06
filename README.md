@@ -12,7 +12,7 @@ Kursprojekt för CNA26
   "productCode": "prod1"
 }
 ```
-Svar:
+Response:
 ```json
 {
   "message": "Produkt tillsatt till önskelistan",
@@ -36,5 +36,5 @@ Svar:
 | Endpoint           | Method | Request                                      | Response                                                                    |
 | ------------------ | ------ | -------------------------------------------- | --------------------------------------------------------------------------- |
 | /wishlist          | POST   | `{"userId":"string","productCode":"string"}` | `{"message":"Produkt tillsatt...","userId":"string","products":["string"]}` |
-| /wishlist/{userId} | GET    | —                                            | `{"userId":"string","products":["string"]}`                                 |
+| /wishlist/{userId} | GET    | -                                            | `{"userId":"string","products":["string"]}`                                 |
 
