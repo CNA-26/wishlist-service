@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers.frontendPoint import router as wishlist_router
+from app.routers.frontendPoint import router as wishlist_router
 
 app = FastAPI()
 
