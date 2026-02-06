@@ -1,24 +1,24 @@
-# docker-fastapi 
+# Wishlist api
+Kursprojekt för CNA26
 
-A sample project for deploying to a PaaS Service like Render or CSC Rahti.
+### För att lägga till en produkt i wishlist:
 
-### For deployment to Render
+POST /wishlist
+Body:
+{
+  "userId": "user1",
+  "productCode": "prod1"
+}
+Svar:
+{
+  "message": "Product added to wishlist",
+  "userId": "user1",
+  "products": ["prod1"]
+}
 
-- Log in to https://render.com/
-- Create a New Web Service.
-- Connect to GitHub and choose Connect Credentials.
-- Set Language to Docker.
-- Select the EU Central region (or whatever is nearest to you)
-- Choose Instance Type: Free.
+#### Specs:
+| Endpoint           | Method | Request                                      | Response                                                                    |
+| ------------------ | ------ | -------------------------------------------- | --------------------------------------------------------------------------- |
+| /wishlist          | POST   | `{"userId":"string","productCode":"string"}` | `{"message":"Product tillsatt...","userId":"string","products":["string"]}` |
+| /wishlist/{userId} | GET    | —                                            | `{"userId":"string","products":["string"]}`                                 |
 
-### For deployment to CSC Rahti (OpenShift)
-
-Note: Change the Git reference setting in OpenShift to *main*:    
-    Edit BuildConfig ==> Show advanced git options ==> Git reference: `main`
-
-### For local real-time development
-
-Rename `.env-example` to `.env` to override the `MODE=production`set in the `Dockerfile`. Note that this needs a valueless declaration of `MODE` in `docker-compose.yml`
-
-To run the container locally:
-`docker-compose up --build`
