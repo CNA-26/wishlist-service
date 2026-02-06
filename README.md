@@ -12,7 +12,7 @@ Kursprojekt för CNA26
   "productCode": "prod1"
 }
 ```
-Response:
+**Response:**
 ```json
 {
   "message": "Produkt tillsatt till önskelistan",
@@ -20,7 +20,7 @@ Response:
   "products": ["prod1"]
 }
 ```
-### 2. Hämta wishlist för en användare
+### För att hämta wishlist för en användare:
 
 **GET** `/wishlist/{userId}`
 
