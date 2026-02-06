@@ -23,6 +23,7 @@ Svar:
 ### 2. Hämta wishlist för en användare
 
 **GET** `/wishlist/{userId}`
+
 **Response:**
 ```json
 {
