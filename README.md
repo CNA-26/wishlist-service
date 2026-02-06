@@ -17,7 +17,18 @@ Svar:
   "userId": "user1",
   "products": ["prod1"]
 }
+```
+### 2. Hämta wishlist för en användare
 
+**GET** `/wishlist/{userId}`
+```json
+**Response:**
+{
+"userId": "user1",
+"products": ["prod1"]
+}
+```
+#### Dessa endpoints är testade med swagger och restclient och fungerar
 #### Specs:
 | Endpoint           | Method | Request                                      | Response                                                                    |
 | ------------------ | ------ | -------------------------------------------- | --------------------------------------------------------------------------- |
