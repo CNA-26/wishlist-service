@@ -11,7 +11,9 @@ Kursprojekt för CNA26
   "userId": "user1",
   "productCode": "prod1"
 }
+```
 Svar:
+```json
 {
   "message": "Produkt tillsatt till önskelistan",
   "userId": "user1",
