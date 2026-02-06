@@ -1,0 +1,11 @@
+POST http://127.0.0.1:8000/wishlist
+Content-Type: application/json
+
+{
+  "userId": "user1",
+  "productCode": "prod1"
+}
+
+###
+
+GET http://127.0.0.1:8000/wishlist/user1
