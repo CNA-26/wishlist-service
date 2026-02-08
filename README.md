@@ -1,6 +1,12 @@
 # Wishlist api
 Kursprojekt för CNA26
 
+## Testdata (Hårdkodat produktregister)
+För att testa kopplingen och se hur bilder och priser hämtas, använd följande produktkoder i dina anrop:
+* `P100` - Monstera (25€)
+* `P200` - Alocasia (59€)
+* `P300` - Strelitzia (139€)
+
 ### För att lägga till en produkt i wishlist:
 
 **POST** `/wishlist`
@@ -9,7 +15,7 @@ Kursprojekt för CNA26
 ```json
 {
   "userId": "user1",
-  "productCode": "prod1"
+  "productCode": "P100"
 }
 ```
 **Response:**
@@ -17,7 +23,7 @@ Kursprojekt för CNA26
 {
   "message": "Produkt tillsatt till önskelistan",
   "userId": "user1",
-  "products": ["prod1"]
+  "products": ["P100"]
 }
 ```
 ### För att hämta wishlist för en användare:
@@ -27,8 +33,15 @@ Kursprojekt för CNA26
 **Response:**
 ```json
 {
-"userId": "user1",
-"products": ["prod1"]
+  "userId": "user1",
+  "products": [
+    {
+      "productCode": "P300",
+      "name": "Strelitzia",
+      "pris": 139,
+      "image": "https://placehold.co/500x500?text=Strelitzia"
+    }
+  ]
 }
 ```
 ### För att flytta en produkt från wishlist till cart:
@@ -38,17 +51,17 @@ Kursprojekt för CNA26
 **Request Body:**
 ```json
 {
-  "productCode": "prod1",
+  "productCode": "P100",
   "quantity": 1
 }
 ```
 **Response:**
 ```json
 {
-  "message": "Produkten flyttad till kundvgnen",
+  "message": "Produkten flyttad till kundvagnen",
   "userId": "user1",
   "moved": {
-    "productCode": "prod1",
+    "productCode": "P100",
     "quantity": 1
   },
   "wishlistNow": []

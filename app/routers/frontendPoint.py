@@ -7,6 +7,13 @@ router = APIRouter()
 #"databas" i minnet
 wishlists: Dict[str, List[str]] = {}
 
+# Detta simulerar "Produktsregister (products API)" från din Miro-board
+PRODUCT_CATALOG = {
+    "P100": {"name": "Monstera", "pris": 25, "image": "https://placehold.co/500x500?text=Monstera"},
+    "P200": {"name": "Alocasia", "pris": 59, "image": "https://placehold.co/500x500?text=Alocasia"},
+    "P300": {"name": "Strelitzia", "pris": 139, "image": "https://placehold.co/500x500?text=Strelitzia"}
+}
+
 #Request modell för frontend
 class AddToWishlistRequest(BaseModel):
     userId: str
@@ -36,9 +43,22 @@ def add_to_wishlist(data: AddToWishlistRequest):
 
 @router.get("/wishlist/{user_id}")
 def get_wishlist(user_id: str):
+    # 1. Hämta id-listan för användaren
+    product_codes = wishlists.get(user_id, [])
+    
+    # 2. Skapa en lista med fullständig info från din placeholder-katalog
+    detailed_products = []
+    for code in product_codes:
+        # Hämta info från PRODUCT_CATALOG, använd fallback om id:t saknas
+        info = PRODUCT_CATALOG.get(code, {"name": "Okänd växt", "pris": 0, "image": "https://placehold.co/500x500?text=Saknas"})
+        detailed_products.append({
+            "productCode": code,
+            **info
+        })
+        
     return {
         "userId": user_id,
-        "products": wishlists.get(user_id, [])
+        "products": detailed_products
     }
 
 
