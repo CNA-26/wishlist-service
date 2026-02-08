@@ -36,9 +36,9 @@ För att testa kopplingen och se hur bilder och priser hämtas, använd följand
   "userId": "user1",
   "products": [
     {
-      "productCode": "P300",
-      "name": "Strelitzia",
-      "pris": 139,
+      "productCode": "P100",
+      "name": "Monstera",
+      "pris": 25,
       "image": "https://placehold.co/500x500?text=Strelitzia"
     }
   ]
