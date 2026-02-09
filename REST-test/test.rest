@@ -1,11 +1,35 @@
+### Lägg till Monstera (P100)
 POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
 
 {
-  "userId": "user1",
-  "productCode": "prod1"
+    "userId": "user1",
+    "productCode": "P100"
 }
 
 ###
 
+### Lägg till Strelitzia (P300)
+POST http://127.0.0.1:8000/wishlist
+Content-Type: application/json
+
+{
+    "userId": "user1",
+    "productCode": "P300"
+}
+
+###
+
+### Hämta listan - Här ser du nu namn, pris och bild-länkar!
 GET http://127.0.0.1:8000/wishlist/user1
+
+###
+
+### Flytta Monstera till kundvagnen
+POST http://127.0.0.1:8000/wishlist/user1/move-to-cart
+Content-Type: application/json
+
+{
+    "productCode": "P100",
+    "quantity": 1
+}
