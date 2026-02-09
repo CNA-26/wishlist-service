@@ -3,9 +3,9 @@ Kursprojekt för CNA26
 
 ## Testdata (Hårdkodat produktregister)
 För att testa kopplingen och se hur bilder och priser hämtas, använd följande produktkoder i dina anrop:
-* `P100` - Monstera (25€)
-* `P200` - Alocasia (59€)
-* `P300` - Strelitzia (139€)
+* `P001` - Monstera (25€)
+* `P002` - Alocasia (59€)
+* `P003` - Strelitzia (139€)
 
 ### För att lägga till en produkt i wishlist:
 
@@ -15,7 +15,7 @@ För att testa kopplingen och se hur bilder och priser hämtas, använd följand
 ```json
 {
   "userId": "user1",
-  "productCode": "P100"
+  "productCode": "P001"
 }
 ```
 **Response:**
@@ -23,7 +23,7 @@ För att testa kopplingen och se hur bilder och priser hämtas, använd följand
 {
   "message": "Produkt tillsatt till önskelistan",
   "userId": "user1",
-  "products": ["P100"]
+  "products": ["P001"]
 }
 ```
 ### För att hämta wishlist för en användare:
@@ -39,7 +39,7 @@ För att testa kopplingen och se hur bilder och priser hämtas, använd följand
       "productCode": "P100",
       "name": "Monstera",
       "pris": 25,
-      "image": "https://placehold.co/500x500?text=Strelitzia"
+      "image": "https://placehold.co/500x500?text=Monstera"
     }
   ]
 }
@@ -51,7 +51,7 @@ För att testa kopplingen och se hur bilder och priser hämtas, använd följand
 **Request Body:**
 ```json
 {
-  "productCode": "P100",
+  "productCode": "P001",
   "quantity": 1
 }
 ```
@@ -61,7 +61,7 @@ För att testa kopplingen och se hur bilder och priser hämtas, använd följand
   "message": "Produkten flyttad till kundvagnen",
   "userId": "user1",
   "moved": {
-    "productCode": "P100",
+    "productCode": "P001",
     "quantity": 1
   },
   "wishlistNow": []
