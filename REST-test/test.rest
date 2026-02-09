@@ -1,21 +1,21 @@
-### Lägg till Monstera (P100)
+### Lägg till Monstera (P001)
 POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
 
 {
     "userId": "user1",
-    "productCode": "P100"
+    "productCode": "P001"
 }
 
 ###
 
-### Lägg till Strelitzia (P300)
+### Lägg till Strelitzia (P003)
 POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
 
 {
     "userId": "user1",
-    "productCode": "P300"
+    "productCode": "P003"
 }
 
 ###
@@ -30,6 +30,6 @@ POST http://127.0.0.1:8000/wishlist/user1/move-to-cart
 Content-Type: application/json
 
 {
-    "productCode": "P100",
+    "productCode": "P001",
     "quantity": 1
 }

@@ -9,9 +9,9 @@ wishlists: Dict[str, List[str]] = {}
 
 # Detta simulerar "Produktsregister (products API)" från din Miro-board
 PRODUCT_CATALOG = {
-    "P100": {"name": "Monstera", "pris": 25, "image": "https://placehold.co/500x500?text=Monstera"},
-    "P200": {"name": "Alocasia", "pris": 59, "image": "https://placehold.co/500x500?text=Alocasia"},
-    "P300": {"name": "Strelitzia", "pris": 139, "image": "https://placehold.co/500x500?text=Strelitzia"}
+    "P001": {"name": "Monstera", "price": 25, "image": "https://placehold.co/500x500?text=Monstera"},
+    "P002": {"name": "Alocasia", "price": 59, "image": "https://placehold.co/500x500?text=Alocasia"},
+    "P003": {"name": "Strelitzia", "price": 139, "image": "https://placehold.co/500x500?text=Strelitzia"}
 }
 
 #Request modell för frontend
