@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Dict, List
+from app.auth import require_jwt
 
 router = APIRouter()
 
@@ -28,7 +29,7 @@ class MoveToCartRequest(BaseModel):
 
 #Endpoints för frontend
 @router.post("/wishlist")
-def add_to_wishlist(data: AddToWishlistRequest):
+def add_to_wishlist(data: AddToWishlistRequest, user=Depends(require_jwt)):
     if data.userId not in wishlists:
         wishlists[data.userId] = []
 
@@ -42,7 +43,7 @@ def add_to_wishlist(data: AddToWishlistRequest):
 
 
 @router.get("/wishlist/{user_id}")
-def get_wishlist(user_id: str):
+def get_wishlist(user_id: str, user=Depends(require_jwt)):
     # 1. Hämta id-listan för användaren
     product_codes = wishlists.get(user_id, [])
     
