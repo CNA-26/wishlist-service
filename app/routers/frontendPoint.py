@@ -20,11 +20,6 @@ class AddToWishlistRequest(BaseModel):
     userId: str
     productCode: str
 
-# Request modell för cart-API
-class MoveToCartRequest(BaseModel):
-    productCode: str
-    quantity: int = 1
-
 
 
 #Endpoints för frontend
@@ -62,25 +57,3 @@ def get_wishlist(user_id: str, user=Depends(require_jwt)):
         "products": detailed_products
     }
 
-
-# Placeholder endpoint för cart-API
-@router.post("/wishlist/{user_id}/move-to-cart")
-def move_to_cart(user_id: str, data: MoveToCartRequest):
-    # kontollera att produkten finns i önskelistan
-    products = wishlists.get(user_id, [])
-    if data.productCode not in products:
-        raise HTTPException(status_code=404, detail="Produkten finns inte i önskelistan")
-    
-    # ta bort produkt frpn önskelistan
-    products.remove(data.productCode)
-    wishlists[user_id] = products
-
-    return {
-        "message": "Produkt flyttad till kundvagnen",
-        "userId": user_id,
-        "moved": {
-            "productCode": data.productCode,
-            "quantity": data.quantity
-        },
-        "wishlistNow": wishlists.get(user_id, [])
-    }
