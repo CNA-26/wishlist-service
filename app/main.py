@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from app.routers.frontendPoint import router as wishlist_router
+from app.routers.cart import router as cart_router
 
 app = FastAPI()
 
 app.include_router(wishlist_router)
+app.include_router(cart_router)
 
 @app.get("/")
 def root():
