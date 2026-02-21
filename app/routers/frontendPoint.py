@@ -8,7 +8,7 @@ router = APIRouter()
 #"databas" i minnet
 wishlists: Dict[str, List[str]] = {}
 
-#request modell för frontned
+#request modell för frontend
 class AddToWishlistRequest(BaseModel):
     productCode: str
 
@@ -39,4 +39,26 @@ def get_wishlist(user=Depends(require_jwt)):
     return {
         "userId": user_id,
         "products": wishlists.get(user_id, [])
+    }
+
+#ta bort från wishlist (jwt required)
+@router.delete("/wishlist/{product_code}")
+def remove_from_wishlist(
+    product_code: str,
+    user=Depends(require_jwt)
+):
+    user_id = user["user_id"]
+
+    products = wishlists.get(user_id, [])
+
+    if product_code not in products:
+        raise HTTPException(status_code=404, detail="Produkten finns inte i önskelistan.")
+
+    products.remove(product_code)
+    wishlists[user_id] = products
+
+    return {
+        "message": "Produkt raderad från önskelistan.",
+        "userId": user_id,
+        "products": wishlists[user_id]
     }
