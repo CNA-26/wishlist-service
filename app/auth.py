@@ -1,6 +1,9 @@
 import os
 from fastapi import Header, HTTPException
+from dotenv import load_dotenv
 import jwt
+
+load_dotenv()
 
 JWT_SECRET = os.getenv("JWT_SECRET")
 
