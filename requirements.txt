@@ -2,3 +2,6 @@ fastapi[standard]
 pydantic
 uvicorn
 PyJWT
+sqlalchemy
+psycopg2-binary
+httpx

@@ -1,35 +1,62 @@
-### Lägg till Monstera (P001)
+### ============================================================
+### 1. Testa Produktregister-API direkt (ingen auth krävs)
+###    Verifiera att produkter hämtas korrekt från externa API:t
+### ============================================================
+GET https://product-service-products-service.2.rahtiapp.fi/products
+
+###
+
+### ============================================================
+### 2. Lägg till en produkt i wishlist
+###    Byt ut TOKEN mot en riktig JWT från auth-servicen
+### ============================================================
 POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
+Authorization: Bearer TOKEN
 
 {
     "userId": "user1",
-    "productCode": "P001"
+    "productCode": "MON217822"
 }
 
 ###
 
-### Lägg till Strelitzia (P003)
+### Lägg till en till produkt
 POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
+Authorization: Bearer TOKEN
 
 {
     "userId": "user1",
-    "productCode": "P003"
+    "productCode": "ROS-RED-001"
 }
 
 ###
 
-### Hämta listan - Här ser du nu namn, pris och bild-länkar!
+### ============================================================
+### 3. Hämta wishlist — ska returnera produktinfo från Produktregister
+### ============================================================
 GET http://127.0.0.1:8000/wishlist/user1
+Authorization: Bearer TOKEN
 
 ###
 
-### Flytta Monstera till kundvagnen
+### ============================================================
+### 4. Ta bort en produkt från wishlist
+### ============================================================
+DELETE http://127.0.0.1:8000/wishlist/user1/MON217822
+Authorization: Bearer TOKEN
+
+###
+
+### ============================================================
+### 5. Flytta produkt till kundvagnen
+### ============================================================
 POST http://127.0.0.1:8000/wishlist/user1/move-to-cart
 Content-Type: application/json
+Authorization: Bearer TOKEN
 
 {
-    "productCode": "P001",
+    "productCode": "ROS-RED-001",
     "quantity": 1
 }
