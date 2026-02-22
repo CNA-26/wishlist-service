@@ -24,8 +24,8 @@ class MoveToCartRequest(BaseModel):
 
 def _token_user_id(user: object) -> str | None:
     if isinstance(user, dict):
-        return user.get("sub") or user.get("user_id") or user.get("userId")
-    return getattr(user, "sub", None) or getattr(user, "user_id", None) or getattr(user, "userId", None)
+        return user.get("user_id")
+    return getattr(user, "user_id", None)
 
 
 def add_item_to_cart_api(user_id: str, product_code: str) -> None:
