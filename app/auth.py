@@ -13,7 +13,7 @@ def require_jwt(authorization: str = Header(None)):
         if scheme.lower() != "bearer":
             raise HTTPException(status_code=401, detail="Invalid auth scheme")
 
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], options={"verify_aud": False})
         user_id = payload.get("sub") or payload.get("user_id") or payload.get("id")
 
         if not user_id:
@@ -23,7 +23,7 @@ def require_jwt(authorization: str = Header(None)):
 
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    except Exception:
-        raise HTTPException(status_code=401, detail="Invalid authorization header")
+    except jwt.InvalidTokenError as e:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Auth error: {e}")
