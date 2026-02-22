@@ -1,4 +1,18 @@
 ### ============================================================
+### 0. Hälsokontroll
+### ============================================================
+GET http://127.0.0.1:8000/
+
+###
+
+### ============================================================
+### 0b. Databaskontroll
+### ============================================================
+GET http://127.0.0.1:8000/db-check
+
+###
+
+### ============================================================
 ### 1. Testa Produktregister-API direkt (ingen auth krävs)
 ###    Verifiera att produkter hämtas korrekt från externa API:t
 ### ============================================================
@@ -9,34 +23,33 @@ GET https://product-service-products-service.2.rahtiapp.fi/products
 ### ============================================================
 ### 2. Lägg till en produkt i wishlist
 ###    Byt ut TOKEN mot en riktig JWT från auth-servicen
+###    OBS: user_id hämtas från JWT, skicka bara productCode
 ### ============================================================
-POST https://wishlist-service-git-wishlist-service.2.rahtiapp.fi/wishlist
+POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
 {
-    "userId": "user1",
     "productCode": "MON217822"
 }
 
 ###
 
 ### Lägg till en till produkt
-POST https://wishlist-service-git-wishlist-service.2.rahtiapp.fi/wishlist
+POST http://127.0.0.1:8000/wishlist
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
 {
-    "userId": "user1",
     "productCode": "ROS-RED-001"
 }
 
 ###
 
 ### ============================================================
-### 3. Hämta wishlist — ska returnera produktinfo från Produktregister
+### 3. Hämta wishlist — user_id hämtas från JWT
 ### ============================================================
-GET http://127.0.0.1:8000/wishlist/user1
+GET http://127.0.0.1:8000/wishlist
 Authorization: Bearer TOKEN
 
 ###
@@ -44,7 +57,7 @@ Authorization: Bearer TOKEN
 ### ============================================================
 ### 4. Ta bort en produkt från wishlist
 ### ============================================================
-DELETE http://127.0.0.1:8000/wishlist/user1/MON217822
+DELETE http://127.0.0.1:8000/wishlist/MON217822
 Authorization: Bearer TOKEN
 
 ###
@@ -52,11 +65,11 @@ Authorization: Bearer TOKEN
 ### ============================================================
 ### 5. Flytta produkt till kundvagnen
 ### ============================================================
-POST https://wishlist-service-git-wishlist-service.2.rahtiapp.fi/wishlist/user1/move-to-cart
+POST http://127.0.0.1:8000/wishlist/move-to-cart
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
 {
-    "productCode": "ROS-RED-001",
-    "quantity": 1
+    "userId": "user1",
+    "productCode": "ROS-RED-001"
 }

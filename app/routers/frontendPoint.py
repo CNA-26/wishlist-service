@@ -1,64 +1,85 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from typing import Dict, List
+from sqlalchemy.orm import Session
+
 from app.auth import require_jwt
+from app.database import get_db
+from app.models import WishlistItem
+from app.routers.Produktregister import fetch_products_by_codes
 
 router = APIRouter()
 
-#"databas" i minnet
-wishlists: Dict[str, List[str]] = {}
 
-#request modell för frontend
 class AddToWishlistRequest(BaseModel):
     productCode: str
 
-#lägg till wishlist (jwt required)
+
 @router.post("/wishlist")
 def add_to_wishlist(
     data: AddToWishlistRequest,
-    user=Depends(require_jwt)
+    user=Depends(require_jwt),
+    db: Session = Depends(get_db),
 ):
     user_id = user["user_id"]
 
-    if user_id not in wishlists:
-        wishlists[user_id] = []
+    existing = db.query(WishlistItem).filter_by(
+        user_id=user_id, product_code=data.productCode
+    ).first()
+    if existing:
+        raise HTTPException(status_code=409, detail="Produkten finns redan i önskelistan.")
 
-    wishlists[user_id].append(data.productCode)
+    db.add(WishlistItem(user_id=user_id, product_code=data.productCode))
+    db.commit()
 
+    all_codes = [
+        i.product_code
+        for i in db.query(WishlistItem).filter_by(user_id=user_id).all()
+    ]
     return {
         "message": "Produkt tillsatt till önskelistan!",
         "userId": user_id,
-        "products": wishlists[user_id]
+        "products": all_codes,
     }
 
-#hämta wishlist (jwt required)
+
 @router.get("/wishlist")
-def get_wishlist(user=Depends(require_jwt)):
+def get_wishlist(
+    user=Depends(require_jwt),
+    db: Session = Depends(get_db),
+):
     user_id = user["user_id"]
+    items = db.query(WishlistItem).filter_by(user_id=user_id).all()
+    product_codes = [item.product_code for item in items]
 
     return {
         "userId": user_id,
-        "products": wishlists.get(user_id, [])
+        "products": fetch_products_by_codes(product_codes),
     }
 
-#ta bort från wishlist (jwt required)
+
 @router.delete("/wishlist/{product_code}")
 def remove_from_wishlist(
     product_code: str,
-    user=Depends(require_jwt)
+    user=Depends(require_jwt),
+    db: Session = Depends(get_db),
 ):
     user_id = user["user_id"]
 
-    products = wishlists.get(user_id, [])
-
-    if product_code not in products:
+    item = db.query(WishlistItem).filter_by(
+        user_id=user_id, product_code=product_code
+    ).first()
+    if not item:
         raise HTTPException(status_code=404, detail="Produkten finns inte i önskelistan.")
 
-    products.remove(product_code)
-    wishlists[user_id] = products
+    db.delete(item)
+    db.commit()
 
+    remaining = [
+        i.product_code
+        for i in db.query(WishlistItem).filter_by(user_id=user_id).all()
+    ]
     return {
         "message": "Produkt raderad från önskelistan.",
         "userId": user_id,
-        "products": wishlists[user_id]
+        "products": remaining,
     }

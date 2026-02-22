@@ -122,6 +122,9 @@ celerybeat.pid
 # Environments
 .env
 
+# VS Code settings
+.vscode/
+
 # REST test files (may contain secrets)
 REST-test/
 .venv

@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends
-from app.routers.Produktregister import router as wishlist_router
+from app.routers.frontendPoint import router as wishlist_router
 from app.routers.cart import router as cart_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, get_db
