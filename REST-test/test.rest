@@ -10,7 +10,7 @@ GET https://product-service-products-service.2.rahtiapp.fi/products
 ### 2. Lägg till en produkt i wishlist
 ###    Byt ut TOKEN mot en riktig JWT från auth-servicen
 ### ============================================================
-POST http://127.0.0.1:8000/wishlist
+POST https://wishlist-service-git-wishlist-service.2.rahtiapp.fi/wishlist
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
@@ -22,7 +22,7 @@ Authorization: Bearer TOKEN
 ###
 
 ### Lägg till en till produkt
-POST http://127.0.0.1:8000/wishlist
+POST https://wishlist-service-git-wishlist-service.2.rahtiapp.fi/wishlist
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
@@ -52,7 +52,7 @@ Authorization: Bearer TOKEN
 ### ============================================================
 ### 5. Flytta produkt till kundvagnen
 ### ============================================================
-POST http://127.0.0.1:8000/wishlist/user1/move-to-cart
+POST https://wishlist-service-git-wishlist-service.2.rahtiapp.fi/wishlist/user1/move-to-cart
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
