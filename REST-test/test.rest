@@ -1,14 +1,16 @@
+@baseUrl = https://wishlist-service-git-wishlist-service.2.rahtiapp.fi
+
 ### ============================================================
 ### 0. Hälsokontroll
 ### ============================================================
-GET http://127.0.0.1:8000/
+GET {{baseUrl}}/
 
 ###
 
 ### ============================================================
 ### 0b. Databaskontroll
 ### ============================================================
-GET http://127.0.0.1:8000/db-check
+GET {{baseUrl}}/db-check
 
 ###
 
@@ -25,9 +27,9 @@ GET https://product-service-products-service.2.rahtiapp.fi/products
 ###    Byt ut TOKEN mot en riktig JWT från auth-servicen
 ###    OBS: user_id hämtas från JWT, skicka bara productCode
 ### ============================================================
-POST http://127.0.0.1:8000/wishlist
+POST {{baseUrl}}/wishlist
 Content-Type: application/json
-Authorization: Bearer TOKEN
+Authorization: Bearer ab3e05499dca3a5f98be1e0b5fcd56c7d9587588dda43b72
 
 {
     "productCode": "MON217822"
@@ -36,7 +38,7 @@ Authorization: Bearer TOKEN
 ###
 
 ### Lägg till en till produkt
-POST http://127.0.0.1:8000/wishlist
+POST {{baseUrl}}/wishlist
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
@@ -49,7 +51,7 @@ Authorization: Bearer TOKEN
 ### ============================================================
 ### 3. Hämta wishlist — user_id hämtas från JWT
 ### ============================================================
-GET http://127.0.0.1:8000/wishlist
+GET {{baseUrl}}/wishlist
 Authorization: Bearer TOKEN
 
 ###
@@ -57,7 +59,7 @@ Authorization: Bearer TOKEN
 ### ============================================================
 ### 4. Ta bort en produkt från wishlist
 ### ============================================================
-DELETE http://127.0.0.1:8000/wishlist/MON217822
+DELETE {{baseUrl}}/wishlist/MON217822
 Authorization: Bearer TOKEN
 
 ###
@@ -65,7 +67,7 @@ Authorization: Bearer TOKEN
 ### ============================================================
 ### 5. Flytta produkt till kundvagnen
 ### ============================================================
-POST http://127.0.0.1:8000/wishlist/move-to-cart
+POST {{baseUrl}}/wishlist/move-to-cart
 Content-Type: application/json
 Authorization: Bearer TOKEN
 
