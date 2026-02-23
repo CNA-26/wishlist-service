@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.auth import require_jwt
@@ -55,6 +56,16 @@ def get_wishlist(
         "userId": user_id,
         "products": fetch_products_by_codes(product_codes),
     }
+
+
+@router.get("/wishlist/stats")
+def get_wishlist_stats(db: Session = Depends(get_db)):
+    rows = (
+        db.query(WishlistItem.product_code, func.count(WishlistItem.user_id))
+        .group_by(WishlistItem.product_code)
+        .all()
+    )
+    return {code: count for code, count in rows}
 
 
 @router.delete("/wishlist/{product_code}")
