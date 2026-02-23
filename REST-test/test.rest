@@ -1,6 +1,19 @@
 @baseUrl = https://wishlist-service-git-wishlist-service.2.rahtiapp.fi
 
 ### ============================================================
+### Login - hämta JWT token
+### ============================================================
+POST https://user-service-cna-26-user-service.2.rahtiapp.fi/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "din@email.com",
+    "password": "dittlösenord"
+}
+
+###
+
+### ============================================================
 ### 0. Hälsokontroll
 ### ============================================================
 GET {{baseUrl}}/
