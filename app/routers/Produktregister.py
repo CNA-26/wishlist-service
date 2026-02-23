@@ -35,7 +35,7 @@ def fetch_products_by_codes(product_codes: list[str]) -> list[dict]:
                 "productCode": code,
                 "product_name": info["product_name"],
                 "price": info["price"],
-                "img": info["img"],
+                "img": info.get("img"),
                 "description": info.get("description_text"),
             })
         else:
