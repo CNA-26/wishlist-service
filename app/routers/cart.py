@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import httpx
@@ -14,12 +14,23 @@ CART_API_URL = os.getenv(
     "CART_API_URL",
     "https://cart-services-git-cartservices.2.rahtiapp.fi"
 )
-PLACEHOLDER_API_KEY = os.getenv("PLACEHOLDER_API_KEY")
+PRODUCTS_API_URL = os.getenv(
+    "PRODUCTS_API_URL",
+    "https://product-service-products-service.2.rahtiapp.fi"
+)
 
 
 class MoveToCartRequest(BaseModel):
     userId: str
     productCode: str
+
+
+def _extract_bearer_token(authorization: str | None) -> str:
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Saknar Authorization header")
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Ogiltig Authorization. Expected: Bearer <token>")
+    return authorization[7:].strip()
 
 
 def _token_user_id(user: object) -> str | None:
@@ -28,28 +39,22 @@ def _token_user_id(user: object) -> str | None:
     return getattr(user, "user_id", None)
 
 
-def add_item_to_cart_api(user_id: str, product_code: str) -> None:
-    # Anropa cart-service för att lägga till en produkt i cart
-    if not PLACEHOLDER_API_KEY:
-        raise HTTPException(
-            status_code=500,
-            detail="PLACEHOLDER_API_KEY saknas"
-        )
-
-    headers = {"Authorization": f"ApiKey {PLACEHOLDER_API_KEY}"}
-    payload = {"product_id": product_code}
-
+def _get_product_by_code(product_code: str) -> dict:
     try:
         with httpx.Client(timeout=5.0) as client:
-            resp = client.post(f"{CART_API_URL}/cart/{user_id}/add-item", json=payload, headers=headers)
+            resp = client.get(f"{PRODUCTS_API_URL}/products")
             resp.raise_for_status()
+            products = resp.json()
     except httpx.RequestError as e:
-        raise HTTPException(status_code=502, detail=f"Kunde inte nå cart-service: {e}")
+        raise HTTPException(status_code=502, detail=f"Kunde inte nå product-service: {e}")
     except httpx.HTTPStatusError as e:
-        raise HTTPException(
-            status_code=502,
-            detail=f"cart-service fel ({e.response.status_code}): {e.response.text}"
-        )
+        raise HTTPException(status_code=502, detail=f"Product-service fel ({e.response.status_code}): {e.response.text}")
+    
+    for p in products:
+        if p.get("product_code") == product_code:
+            return p
+        
+    raise HTTPException(status_code=404, detail="Produkten hittades inte i produktregistret")
 
 
 # Flytta produkt från wishlist till cart-service
@@ -58,8 +63,9 @@ def move_to_cart(
     data: MoveToCartRequest,
     user=Depends(require_jwt),
     db: Session = Depends(get_db),
+    authorization: str = Header(None, alias="Authorization")
 ):
-    token_uid = _token_user_id(user)
+    token_uid = user.get("user_id")
     if token_uid and token_uid != data.userId:
         raise HTTPException(status_code=403, detail="userId matchar inte token-användaren.")
 
@@ -71,8 +77,41 @@ def move_to_cart(
     if not item:
         raise HTTPException(status_code=404, detail="Produkten finns inte i önskelistan.")
 
-    # Lägg till i cart via cart-API
-    add_item_to_cart_api(data.userId, data.productCode)
+    # Hämta productinfo
+    p = _get_product_by_code(data.productCode)
+
+    product_id = p.get("id")
+    if product_id is None:
+        raise HTTPException(status_code=502, detail="Produkten saknar id")
+    
+    image_urls = p.get("image_urls") or []
+    image_url = image_urls[0] if len(image_urls) > 0 else ""
+
+    cart_payload = {
+        "product_id": int(product_id),
+        "name": p.get("product_name"),
+        "price": float(p.get("price")),
+        "quantity": 1,
+        "image_url": image_url,
+    }
+
+    if cart_payload["name"] is None or p.get("price") is None:
+        raise HTTPException(status_code=502, detail="Produktregistret saknar product_name eller price")
+    
+    try:
+        token = _extract_bearer_token(authorization)
+
+        with httpx.Client(timeout=5.0) as client:
+            resp = client.post(
+                f"{CART_API_URL}/cart/{data.userId}/add-item",
+                json=cart_payload,
+                headers={"Authorization": f"Bearer {token}"}
+            )
+            resp.raise_for_status()
+    except httpx.RequestError as e:
+        raise HTTPException(status_code=502, detail=f"Kunde inte nå cart-service: {e}")
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=502, detail=f"cart-service fel ({e.response.status_code}): {e.response.text}")
 
     # ta bort från wishlist
     db.delete(item)
