@@ -6,7 +6,7 @@ En mikroservice byggd med FastAPI som hanterar en användares önskelista. Produ
 ## Teknikstack
 - **Python 3.10** + **FastAPI**
 - **SQLAlchemy** + **PostgreSQL** (psycopg2)
-- **PyJWT** – validering av JWT-tokens
+- **python-jose** – validering av JWT-tokens
 - **httpx** – HTTP-anrop till Produktregister och Cart Service
 - **Docker** + docker-compose
 - Driftsatt på **Rahti/CSC**: https://wishlist-service-git-wishlist-service.2.rahtiapp.fi
@@ -24,7 +24,6 @@ cp .env.example .env
 | `DATABASE_URL` | PostgreSQL-anslutning, t.ex. `postgresql://user:pass@host:5432/wishlist_db` |
 | `JWT_SECRET` | Delad hemlighet med Auth Service (HS256) |
 | `PRODUCTS_API_URL` | Bas-URL till Produktregister-API (default: `https://product-service-products-service.2.rahtiapp.fi`) |
-| `PLACEHOLDER_API_KEY` | API-nyckel till Cart Service |
 | `MODE` | `development` (hot-reload) eller `production` (default) |
 
 ### 2. Starta med Docker
@@ -40,7 +39,7 @@ Alla skyddade endpoints kräver ett giltigt JWT i headern:
 ```
 Authorization: Bearer <token>
 ```
-`user_id` hämtas automatiskt ur JWT-payloadens `sub`, `user_id` eller `id`-fält. Du behöver **inte** skicka med `userId` i request-bodyn (utom för `move-to-cart`).
+`user_id` hämtas automatiskt ur JWT-payloadens `sub`-fält. Du behöver **inte** skicka med `userId` i request-bodyn (utom för `move-to-cart`).
 
 Hämta en token från Auth Service:
 ```

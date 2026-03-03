@@ -42,7 +42,7 @@ GET https://product-service-products-service.2.rahtiapp.fi/products
 ### ============================================================
 POST {{baseUrl}}/wishlist
 Content-Type: application/json
-Authorization: Bearer ab3e05499dca3a5f98be1e0b5fcd56c7d9587588dda43b72
+Authorization: Bearer TOKEN
 
 {
     "productCode": "MON217822"
